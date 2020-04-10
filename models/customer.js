@@ -26,6 +26,9 @@ class Customer {
        FROM customers
        ORDER BY last_name, first_name`
     );
+
+    console.log(results)
+
     return results.rows.map(c => new Customer(c));
   }
 
@@ -98,9 +101,27 @@ class Customer {
     }
   }
 
+  static async getTopCustomers(topnumCustomers) {
+    
+    const results = await db.query(
+      `SELECT c.id, c.first_name as firstName, c.last_name as lastName, COUNT(*) 
+       FROM reservations as "r"
+       JOIN customers as "c"
+         ON c.id = r.customer_id
+         GROUP BY c.id
+         ORDER BY COUNT(*) DESC 
+         LIMIT $1
+       `,[topnumCustomers]
+    );
+    // console.log(results)
+    return results.rows.map(c => new Customer(c));
+  }
+
   fullName(){
     return `${this.firstName} ${this.lastName}`
   }
+
+
 }
 
 module.exports = Customer;
