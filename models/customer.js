@@ -16,7 +16,7 @@ class Customer {
 
   /** find all customers. */
 
-  static async all() {
+  static async all() { 
     const results = await db.query(
       `SELECT id, 
          first_name AS "firstName",  
@@ -27,7 +27,7 @@ class Customer {
        ORDER BY last_name, first_name`
     );
 
-    console.log(results)
+    // console.log(results)
 
     return results.rows.map(c => new Customer(c));
   }
@@ -104,7 +104,10 @@ class Customer {
   static async getTopCustomers(topnumCustomers) {
     
     const results = await db.query(
-      `SELECT c.id, c.first_name as firstName, c.last_name as lastName, COUNT(*) 
+      `SELECT c.id, 
+              c.first_name as "firstName", 
+              c.last_name as "lastName" , 
+              c.phone, c.notes
        FROM reservations as "r"
        JOIN customers as "c"
          ON c.id = r.customer_id
@@ -113,7 +116,6 @@ class Customer {
          LIMIT $1
        `,[topnumCustomers]
     );
-    // console.log(results)
     return results.rows.map(c => new Customer(c));
   }
 

@@ -34,7 +34,7 @@ router.get("/", async function(req, res, next) {
 router.get("/best/", async function(req, res, next) {
   try {
       customers = await Customer.getTopCustomers(NUMOFTOPCUSTOMERS);
-      // console.log(customers)
+      console.log(customers)
       return res.render("customer_best.html", { customers });
     } catch (err) {
 
